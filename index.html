@@ -1,0 +1,154 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <title>Advent calendar @Megafry</title>
+        <meta charset="utf-8" />
+        <meta name="apple-mobile-web-app-title" content="advent calendar">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+        <meta name="theme-color" content="#175257">
+        <meta name="description" content="Advent calendar">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <link href="https://fonts.googleapis.com/css?family=Snowburst+One&display=swap" rel="stylesheet">
+        <style>
+            body {
+              text-align: center;
+              background-color: #ccc;
+              color: #fff;
+              color: rgba(255,255,255,0.2);
+              font-size: 30px;
+              line-height: 0.8;
+              font-variant: small-caps;
+              font-family: 'Snowburst One', cursive;
+              -overflow: hidden;
+            }
+            #by {
+              display: none;
+            }
+            .calendar {
+              list-style: none;
+              margin: 0;
+              padding: 0;
+              display: block;
+            }
+            .calendar__window {
+              display: inline-block;
+              width: 280px;
+              position: relative;
+              margin: 2.5%;
+              background-color: #2e2a2a;
+              background-repeat: no-repeat;
+              background-position: center center;
+              background-size: cover;
+            }
+            .calendar__window:before {
+              position: relative;
+              content: attr(data-day);
+              display: block;
+              width: 100%;
+              height: 0;
+              font-size: 110px;
+              line-height: 155px;
+              padding-bottom: 56.25%;
+              cursor: pointer;
+            }
+
+            .calendar__window--open {
+              color: transparent;
+            }
+
+
+            .calendar__window span{
+              position: absolute;
+              display: block;
+              top: 0;
+              left: 0;
+              bottom: 0;
+              right: 0;
+              perspective: 900px;
+              opacity: 0.4;
+              transition: opacity 0.4s;
+            }
+            .calendar__window:hover:before {
+              content: "?";
+            }
+            .calendar__window:hover span,
+            .calendar__window--open span {
+              opacity: 1;
+            }
+            .calendar__window span:before,
+            .calendar__window span:after {
+              content: "";
+              position: absolute;
+              top: 0;
+              left: 0;
+              bottom: 0;
+              right: 50%;
+              background-color: #ddd;
+              z-index: 1;
+              transform-origin: 0% 50%;
+              transform:rotateY(0deg);
+              transition: transform 0.4s cubic-bezier(0.63, 0.04, 0.2, 1.46);
+            }
+            .calendar__window span:after {
+                left: 50%;
+                right: 0;
+                transform-origin: 100% 50%;
+            }
+
+            .calendar__window--open span:before,
+            .calendar__window:hover span:before {
+              transform:rotateY(-87deg);
+            }
+            .calendar__window--open span:after,
+            .calendar__window:hover span:after {
+              transform:rotateY(87deg);
+            }
+
+
+        </style>
+    </head>
+
+    <body id="body">
+
+
+        <a id="by" href="https://github.com/Megafry" target="_blank" title="visit my github">@Megafry</a>
+        <script
+        src="https://code.jquery.com/jquery-3.4.1.min.js"
+        crossorigin="anonymous"></script>
+        <script>
+          $(function() {
+
+
+            $("body").on("click",".calendar__window", function(){
+                var el = $(this);
+                video = el.attr("data-video");
+                el.addClass("calendar__window--open").css('background-image', 'url(https://img.youtube.com/vi/' + video + '/hqdefault.jpg)');
+            });
+
+            function openWindows(){
+
+            }
+
+              $.getJSON( "data.json", function( data ) {
+              var items = [];
+
+              $.each( data['days'], function( key, val ) {
+                var day = new Date(val.date);
+                console.log(day);
+                items.push( "<li class='calendar__window' data-day="+ day.getDate() +" data-video="+val.video+"><span></span></li>" );
+              });
+
+              $( "<ul/>", {
+                "class": "calendar",
+                html: items.join( "" )
+              }).appendTo( "body" );
+            });
+
+          });
+      </script>
+    </body>
+</html>
